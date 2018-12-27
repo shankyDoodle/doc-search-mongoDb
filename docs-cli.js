@@ -23,20 +23,21 @@ module.exports = main;
 async function go(args) {
   let finder;
   try {
-    if (!/^mongodb\:\/\/.+?\:\d+\/\w+$/.test(args[0])) {
-      console.error('bad mongo-db url; must be of form ' +
-		    'mongodb://SERVER:PORT/DBNAME');
-      usage();
-    }
-    const cmd = args[1];
+    let sUrl = "mongodb+srv://shankydoodle:3dYVAShrsanaQVYH@cluster0-dyr1y.mongodb.net/test?retryWrites=true&authSource=admin";
+    const cmd = args[0];
     const fn = COMMANDS[cmd];
     if (!fn) {
-      console.error(`bad command '${args[1]}'`);
+      console.error(`bad command '${args[0]}'`);
       usage();
     }
-    finder = new DocFinder(args[0]);
-    await finder.init();
-    await fn(finder, args.slice(2));
+    finder = new DocFinder(sUrl);
+    try{
+      await finder.init();
+      await fn(finder, args.slice(1));
+    }catch (e){
+      console.log("Error is:", e);
+    }
+
   }
   catch (err) {
     console.error(err);

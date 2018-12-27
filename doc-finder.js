@@ -78,8 +78,13 @@ class DocFinder {
    *  immediately after creating a new instance of this.
    */
   async init() {
-    this.mongoClient = await MongoClient.connect(this.dbUrl, MONGO_OPTIONS);
-    this.myDb = this.mongoClient.db('mydb');
+    try{
+      this.mongoClient = await MongoClient.connect(this.dbUrl, MONGO_OPTIONS);
+      this.myDb = this.mongoClient.db('mydb');
+    }catch (e) {
+      throw(e);
+    }
+
   }
 
   /** Release all resources held by this doc-finder.  Specifically,
